@@ -18,7 +18,7 @@ This is the backend for the BlogitUp project. It extracts content from a URL or 
 🧠 How it works
 
     /api/fetch-url (GET)
-    Takes a blog/article URL → scrapes + extracts clean readable text (up to 3,000 chars).
+    Takes a blog/article URL → scrapes + extracts clean readable text (up to 10,000 chars).
 
     /api/tts (POST)
     Accepts blog content → sends to Gemini → gets summarized insight text → returns it to frontend.
@@ -50,13 +50,16 @@ The backend allows requests from:
     https://blogitup-fe.vercel.app
 
 Feel free to update this in the allowedOrigins array.
-🧪 Tested With
+## ✅ Tested With
 
-✅ Zen Browser - GitFool
-✅ Atlas OS
-✅ Nodesource Threading
-✅ Why Bun is Better - Dev.to
-✅ Deno @ The Guardian
+The app has been tested with the following blog URLs:
+
+- [Zen Browser: A New Era of Browsing](https://gitfool.vercel.app/blog/zen-browser-a-new-era-of-browsing)
+- [Atlas OS: A Lightweight Open Source Windows Mod](https://gitfool.vercel.app/blog/atlas-os-a-lightweight-open-source-windows-mod)
+- [Worker Threads in Node.js](https://nodesource.com/blog/worker-threads-nodejs-multithreading-in-javascript)
+- [The Advantages of Bun – When to Choose it Over Node.js](https://dev.to/kwamedev/the-advantages-of-bun-when-to-choose-it-over-nodejs-m4m)
+- [How The Guardian Uses Deno for Accessibility Audits](https://medium.com/@denoland/how-the-guardian-uses-deno-to-audit-accessibility-and-performance-across-their-2-7-million-articles-97bff7edc22f)
+
 📁 Repo Structure
 
 blogitup_BE/
