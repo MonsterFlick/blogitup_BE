@@ -40,20 +40,31 @@ function isValidHttpUrl(string: string): boolean {
     return false;
   }
 }
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://blogitup-fe.vercel.app",
+];
+
+function getCORSHeaders(origin: string | null): HeadersInit {
+  return {
+    "Access-Control-Allow-Origin": allowedOrigins.includes(origin || "")
+      ? origin!
+      : "null",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
 
 serve({
   port: 4000,
   async fetch(req) {
+    const origin = req.headers.get("origin");
     const url = new URL(req.url);
 
     if (req.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
+        headers: getCORSHeaders(origin),
       });
     }
 
@@ -65,7 +76,10 @@ serve({
           JSON.stringify({ error: "Invalid or missing URL" }),
           {
             status: 400,
-            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+            headers: {
+              "Content-Type": "application/json",
+              ...getCORSHeaders(origin),
+            },
           }
         );
       }
@@ -96,15 +110,24 @@ serve({
         return new Response(
           JSON.stringify({ title: article.title, textContent: cleanedText }),
           {
-            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+            headers: {
+              "Content-Type": "application/json",
+              ...getCORSHeaders(origin),
+            },
           }
         );
       } catch (err) {
         console.error("Error in /api/fetch-url:", err);
-        return new Response(JSON.stringify({ error: "Failed to extract blog content" }), {
-          status: 500,
-          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-        });
+        return new Response(
+          JSON.stringify({ error: "Failed to extract blog content" }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              ...getCORSHeaders(origin),
+            },
+          }
+        );
       }
     }
 
@@ -116,7 +139,7 @@ serve({
         if (!text || typeof text !== "string" || text.trim().length === 0) {
           return new Response("Invalid input", {
             status: 400,
-            headers: { "Access-Control-Allow-Origin": "*" },
+            headers: getCORSHeaders(origin),
           });
         }
 
@@ -164,7 +187,7 @@ serve({
         if (!base64) {
           return new Response("Audio generation failed", {
             status: 500,
-            headers: { "Access-Control-Allow-Origin": "*" },
+            headers: getCORSHeaders(origin),
           });
         }
 
@@ -186,7 +209,7 @@ serve({
           {
             headers: {
               "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
+              ...getCORSHeaders(origin),
             },
           }
         );
@@ -196,20 +219,20 @@ serve({
         if (err instanceof ApiError && err.status === 429) {
           return new Response("You hit your daily Gemini TTS limit.", {
             status: 429,
-            headers: { "Access-Control-Allow-Origin": "*" },
+            headers: getCORSHeaders(origin),
           });
         }
 
         return new Response("Internal Server Error", {
           status: 500,
-          headers: { "Access-Control-Allow-Origin": "*" },
+          headers: getCORSHeaders(origin),
         });
       }
     }
 
     return new Response("Not Found", {
       status: 404,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: getCORSHeaders(origin),
     });
   },
 });
