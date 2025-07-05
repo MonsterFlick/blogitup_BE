@@ -71,10 +71,22 @@ blogitup_BE/
 
     Browser now handles the TTS. No Gemini audio base64 used anymore.
 
-🔗 Deployment URLs
-Service	URL
-🌐 Backend	https://blogitup-be.onrender.com
-🧠 Gemini API	gemini-1.5-flash for insights
-💻 Frontend	https://blogitup-fe.vercel.app
-🧾 GitHub BE	GitHub - blogitup_BE
-🧾 GitHub FE	GitHub - blogitup_FE
+
+### 🔗 Deployment URLs
+
+* 🌐 **Backend (Render)**:
+  [`https://blogitup-be.onrender.com`](https://blogitup-be.onrender.com)
+
+* 💻 **Frontend (Vercel)**:
+  [`https://blogitup-fe.vercel.app`](https://blogitup-fe.vercel.app)
+
+* 🧠 **Gemini API Model**:
+  `gemini-1.5-flash` (for insights only; TTS removed in favor of browser TTS)
+
+* 🧾 **GitHub - Backend**:
+  [`https://github.com/MonsterFlick/blogitup_BE`](https://github.com/MonsterFlick/blogitup_BE)
+
+* 🧾 **GitHub - Frontend**:
+  [`https://github.com/MonsterFlick/Blogitup_FE`](https://github.com/MonsterFlick/Blogitup_FE)
+
+
