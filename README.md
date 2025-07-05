@@ -5,7 +5,8 @@ This is the backend service for the **Blogitup** app, built using **Bun** runtim
 
 - Blog content extraction via URL
 - Insight generation using Google Gemini AI
-- Browser-based TTS compatibility (fallback after removing Gemini TTS due to quota)
+- Browser-based TTS compatibility 
+-- Removing Gemini TTS due to API quota but code can be found at [Gemini TTS](https://github.com/MonsterFlick/blogitup_BE/tree/AI-TTS)
 
 ---
 
