@@ -1,55 +1,96 @@
-📦 BlogitUp Backend
 
-This is the backend for the BlogitUp project. It extracts content from a URL or direct text input, summarizes it using Google Gemini API, and returns both text insights and optionally base64-encoded audio (now replaced with browser-native TTS).
-🚀 Features
+# 🧠 Blogitup Backend (Bun + Gemini AI)
 
-    ✅ URL scraping using JSDOM + Readability
+This is the backend service for the **Blogitup** app, built using **Bun** runtime. It powers:
 
-    ✅ Blog text cleaning via html-to-text
+- Blog content extraction via URL
+- Insight generation using Google Gemini AI
+- Browser-based TTS compatibility (fallback after removing Gemini TTS due to quota)
 
-    ✅ Gemini API integration for generating insights
+---
 
-    ✅ CORS support for frontend on Vercel + local dev
+## 🚀 Deployment
 
-    ✅ Graceful error handling with proper HTTP responses
+- **Live Backend API**: https://blogitup-be.onrender.com  
+- **GitHub Repo**: https://github.com/MonsterFlick/blogitup_BE
 
-    ⚠️ No longer using AI-based audio (TTS now handled in browser)
+---
 
-🧠 How it works
+## 📦 Tech Stack
 
-    /api/fetch-url (GET)
-    Takes a blog/article URL → scrapes + extracts clean readable text (up to 10,000 chars).
+- ⚡️ [Bun](https://bun.sh) — Superfast JavaScript runtime
+- 🤖 [Google Gemini API](https://ai.google.dev/)
+- 📄 [JSDOM](https://github.com/jsdom/jsdom) + [Mozilla Readability](https://github.com/mozilla/readability)
+- 🔊 Browser SpeechSynthesis — for frontend TTS
 
-    /api/tts (POST)
-    Accepts blog content → sends to Gemini → gets summarized insight text → returns it to frontend.
+---
 
-🔐 Requirements
+## 🌐 API Endpoints
 
-    Bun runtime
+### `GET /api/fetch-url?url=YOUR_BLOG_URL`
 
-    Google Gemini API key
-    You can get it from https://makersuite.google.com/app/apikey
+Extracts meaningful text content from any valid blog/webpage.
 
-🛠️ Environment Setup
+**Query Params:**
+- `url` — A valid HTTP/HTTPS blog/article URL.
 
-Create a .env file:
+**Returns:**
+```json
+{
+  "title": "Blog Title",
+  "textContent": "Cleaned plain text content"
+}
+````
 
-GEMINI_API_KEY=your_api_key_here
+---
 
-⚙️ Scripts
+### `POST /api/tts`
 
-bun install       # Install dependencies
-bun run index.ts  # Start server on http://localhost:4000
+Sends blog content to Gemini to generate insights.
 
-🌐 CORS Allowed Origins
+**Request Body:**
 
-The backend allows requests from:
+```json
+{
+  "text": "Blog or article content"
+}
+```
 
-    http://localhost:3000
+**Returns:**
 
-    https://blogitup-fe.vercel.app
+```json
+{
+  "text": "AI-generated insights"
+}
+```
 
-Feel free to update this in the allowedOrigins array.
+> ❗️Note: Gemini TTS was removed due to quota limits. Browser TTS is now used on the frontend.
+
+---
+
+## 🔐 CORS Config
+
+Only these origins are allowed:
+
+* `http://localhost:3000`
+* `https://blogitup-fe.vercel.app`
+
+Dynamic CORS headers are set based on `req.headers.get("origin")`.
+
+---
+
+## ⚠️ Error Handling
+
+The backend gracefully handles:
+
+* Invalid URLs
+* Blog content not found
+* Google Gemini quota issues (429 errors)
+* Parsing failures
+* General exceptions
+
+---
+
 ## ✅ Tested With
 
 The app has been tested with the following blog URLs:
@@ -60,36 +101,45 @@ The app has been tested with the following blog URLs:
 - [The Advantages of Bun – When to Choose it Over Node.js](https://dev.to/kwamedev/the-advantages-of-bun-when-to-choose-it-over-nodejs-m4m)
 - [How The Guardian Uses Deno for Accessibility Audits](https://medium.com/@denoland/how-the-guardian-uses-deno-to-audit-accessibility-and-performance-across-their-2-7-million-articles-97bff7edc22f)
 
-📁 Repo Structure
+---
 
-blogitup_BE/
-├── index.ts           # Bun server with Gemini + CORS
-├── .env               # Your API key
-├── package.json
-└── README.md          # You are here
+## 🛠️ Local Development
 
-⚠️ Notes
+### 1. Clone the repo
 
-    If you're hitting API quota (429 Too Many Requests), let the developer know – we’ll rotate the Gemini API key.
+```bash
+git clone https://github.com/MonsterFlick/blogitup_BE
+cd blogitup_BE
+bun install
+```
 
-    Browser now handles the TTS. No Gemini audio base64 used anymore.
+### 2. Add `.env` file
 
+```env
+GEMINI_API_KEY=your_google_gemini_api_key
+```
 
-### 🔗 Deployment URLs
+> Get your Gemini API key from: [https://makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey)
 
-* 🌐 **Backend (Render)**:
-  [`https://blogitup-be.onrender.com`](https://blogitup-be.onrender.com)
+### 3. Run the server
 
-* 💻 **Frontend (Vercel)**:
-  [`https://blogitup-fe.vercel.app`](https://blogitup-fe.vercel.app)
+```bash
+bun run index.ts
+```
 
-* 🧠 **Gemini API Model**:
-  `gemini-1.5-flash` (for insights only; TTS removed in favor of browser TTS)
+Server will run at `http://localhost:4000`
 
-* 🧾 **GitHub - Backend**:
-  [`https://github.com/MonsterFlick/blogitup_BE`](https://github.com/MonsterFlick/blogitup_BE)
+---
 
-* 🧾 **GitHub - Frontend**:
-  [`https://github.com/MonsterFlick/Blogitup_FE`](https://github.com/MonsterFlick/Blogitup_FE)
+## 📌 Notes
 
+* If you hit Gemini API quota or receive any 429/403 errors not handled, please inform me. I can rotate the API key temporarily.
+* Backend uses `wav`, `jsdom`, `html-to-text`, and Gemini's Flash model for summarization.
+
+---
+
+## ✨ Author
+
+**Om Bajirao Thakur**
+GitHub: [https://github.com/MonsterFlick](https://github.com/MonsterFlick)
 
