@@ -176,7 +176,21 @@ serve({
       }
     }
 
-    // -------- Unknown Route --------
+      if (url.pathname === "/api/ping" && req.method === "GET") {
+        return new Response("pong ", {
+          status: 200,
+          headers: {
+            "Content-Type": "text/plain",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+          },
+        });
+      }
+     return new Response("Not Found", {
+      status: 404,
+      headers: getCORSHeaders(origin),
+    });
+
     return new Response("Not Found", {
       status: 404,
       headers: getCORSHeaders(origin),
