@@ -186,10 +186,6 @@ serve({
           },
         });
       }
-     return new Response("Not Found", {
-      status: 404,
-      headers: getCORSHeaders(origin),
-    });
 
     return new Response("Not Found", {
       status: 404,
